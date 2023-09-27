@@ -7,7 +7,7 @@ export const Main = () => {
   const [account, setAccount] = useState("");
   return (
     <div>
-      <Profile />
+      <WalletName />
       <Wallet account={account} setAccount={setAccount}></Wallet>
       <MintAndTransfer
         account={account}
@@ -17,7 +17,8 @@ export const Main = () => {
   );
 };
 
-function Profile() {
+function WalletName() {
+  //어떤 wallet에 연결되었는지를 보여줌.
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect();
 
