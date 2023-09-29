@@ -81,39 +81,23 @@
         {
           "indexed": false,
           "internalType": "string",
-          "name": "email",
+          "name": "status",
+          "type": "string"
+        },
+       
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "age",
           "type": "string"
         },
         {
           "indexed": false,
           "internalType": "string",
-          "name": "company",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "university",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "major",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "phone",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "portfolio",
+          "name": "dorm",
           "type": "string"
         }
+     
       ],
       "name": "SimpleCardInfoRegistered",
       "type": "event"
@@ -148,6 +132,37 @@
       "inputs": [
         {
           "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amountOfTokenOwnedByIssuer",
+          "type": "uint256"
+        }
+      ],
+      "name": "SimpleQuizBoolean",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
           "internalType": "address",
           "name": "to",
           "type": "address"
@@ -293,39 +308,20 @@
             },
             {
               "internalType": "string",
-              "name": "email",
+              "name": "status",
               "type": "string"
             },
             {
-              "internalType": "address",
-              "name": "issuer",
-              "type": "address"
+              "internalType": "int",
+              "name": "age",
+              "type": "int256"
             },
             {
               "internalType": "string",
-              "name": "company",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "university",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "major",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "phone",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "portfolio",
+              "name": "dorm",
               "type": "string"
             }
+          
           ],
           "internalType": "struct SimpleCardNFTFactory.SimpleCardInfo",
           "name": "",
@@ -407,32 +403,17 @@
         },
         {
           "internalType": "string",
-          "name": "_email",
+          "name": "_status",
           "type": "string"
         },
         {
-          "internalType": "string",
-          "name": "_company",
-          "type": "string"
+          "internalType": "int",
+          "name": "_age",
+          "type": "uint256"
         },
         {
           "internalType": "string",
-          "name": "_university",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_major",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_phone",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_portfolio",
+          "name": "_dorm",
           "type": "string"
         }
       ],

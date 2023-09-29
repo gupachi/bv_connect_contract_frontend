@@ -9,5 +9,25 @@ interface WalletProps {
 }
 
 export const Wallet = ({ account, setAccount }: WalletProps) => {
-  /** 여기다가 구현해보세용~~~ */
+  const { address, isConnected } = useAccount();
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+  const { disconnect } = useDisconnect();
+  setAccount(address!);
+
+  return (
+    <>
+      {isConnected ? (
+        <>
+          <div>
+            Connected to {address}
+            <button onClick={() => disconnect()}>Disconnect</button>
+          </div>
+        </>
+      ) : (
+        <button onClick={() => connect()}>Connect Wallet</button>
+      )}
+    </>
+  );
 };

@@ -41,4 +41,4 @@ function WalletName() {
       {error && <div>{error.message}</div>}
     </div>
   );
-}
+          }
