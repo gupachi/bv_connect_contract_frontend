@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import {userEvent} from '@testing-library/user-event';
 import Web3 from 'web3';
 import { setConstantValue } from 'typescript';
+import axios from 'axios';
+import { contract } from 'web3/lib/commonjs/eth.exports';
 
-
-
+// 외부와의 통신에서 사용 
 const abi = SimpleCardNFTFactoryABI.abi; //SimpleCardNFTFactoryABI는 스마트 컨트랙트의 ABI(Application Binary Interface) 정보를 가져옵니다.
 interface MintTranProps {
   account: string;
@@ -19,20 +20,23 @@ export const MintAndTransfer = ({ account, setAccount }: MintTranProps) => {
   const [status, setStatus] = useState("");
   const [age, setAge] = useState("");
   const [dorm, setDorm] = useState("");
-  const[answer,setAnswer] = useState(""); // 기숙사 Quiz 에서 쓰일 정보 
+  const[answer,setAnswer] = useState("");
+  const [inputData, setInputData] = useState(""); // 기숙사 Quiz 에서 쓰일 정보 
   // transferTo와 setTransferTo 상태 변수 추가
   const [transferTo, setTransferTo] = useState("");
+  const [quiz, setQuiz] = useState("");
+// ...
 
 
 
-  const TransferTo = async () => {
+    const TransferTo = async () => {
     // transferTo를 인자로 전달
     const tx = await simpleCardNFTFactory.transferSimpleCardNFT(transferTo);
     const txReceipt = await tx.wait();
     console.log(txReceipt);
   };
 
- // to -from 관계 
+ // to -from 관계  누군한테 정보를 전달할 것인지 
   const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner();
   const provider = new ethers.providers.JsonRpcProvider(
     constants.SeopoliaRPCUrl
@@ -66,27 +70,33 @@ export const MintAndTransfer = ({ account, setAccount }: MintTranProps) => {
   };
 
 
-  // Metamask가 설치된 경우에 etherscan에 연결 
-  if(window.ethereum) {
-    const web3 = new Web3(window.ethereum);
-  } else {
-    console.log('Please install Metamask.');
-  }
-  // 오류: Web3 -> metamask 연결 -> EtherScan input data 보기 
-  const info = async () => {
-   Web3.eth.getTransaction(transferTo)
-  .then(  transfer => {
-    // ABI 디코딩을 통해 input data 해석
-    const contract = new Web3.eth.Contract(abi);
-    const inputData = contract.decodeFunctionCall(transfer.input);
-    console.log(inputData);
-  });
+
+
+ const fetchInputData = async() => {
+    try {
+        const response = await axios.get(constants.ETHERSCAN_API_URL, {
+            params: {
+                module: "proxy",
+                action: "eth_getTransactionByHash",
+                txhash: account,
+                apikey: constants.API_KEY
+            }
+        });
+    
+        const data = response.data.result?.input;
+        setInputData(data);
+    } catch (error) {
+        console.error("Error fetching transaction data:", error);
+    }
 }
-  
+
+
+
+
 
 //사용자 입력을 받고, 버튼을 클릭하면 상태를 업데이트하거나 이더리움 트랜잭션을 발생시킵니다.
   return (
-    <>
+   <>
       <div>
         <input
           type="text"
@@ -112,6 +122,8 @@ export const MintAndTransfer = ({ account, setAccount }: MintTranProps) => {
           value={dorm}
           onChange={(e) => setDorm(e.target.value)}
         />
+        </div>
+        <div>
         <button onClick={() => Register()}>Register My Info</button>
       </div>
       <div>
@@ -119,27 +131,12 @@ export const MintAndTransfer = ({ account, setAccount }: MintTranProps) => {
       </div>
      
       <div>
-        <input
-          type="text"
-          placeholder="Transfer to"
-          value={transferTo}
-          onChange={(e) =>  setTransferTo(e.target.value)}
-        />
-        <button onClick={() => TransferTo()}>Transfer</button>
-      </div>
-      <div>
-      <input
-          type="text"
-          placeholder="Quiz"
-          value={answer}
-          onChange={(e) => (e.target.value)}
-        />
-        <button onClick={() => info()}>Answer</button>
-    </div>
-    
-   
-    
+  <button onClick={() => fetchInputData()}>Fetch Input Data</button> 
+  {inputData && <div>{inputData}</div>}
+   </div>
+
     </>
   );
-        
-        }
+  
+  
+}
